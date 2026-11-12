@@ -1,14 +1,6 @@
-/**
- * FinFlow — Personal Finance Dashboard
- * Robust, client-side, dependency-free vanilla JavaScript application.
- */
-
 (function () {
   'use strict';
 
-  // ==========================================================================
-  // 1. Category Definitions & Color Palette
-  // ==========================================================================
   const CATEGORIES = {
     expense: [
       { id: 'food', name: 'Food & Dining', icon: '🍔', color: '#f59e0b' },
@@ -30,13 +22,11 @@
     ]
   };
 
-  // Helper map for fast category lookup by ID
   const CATEGORY_MAP = {};
   [...CATEGORIES.expense, ...CATEGORIES.income].forEach(cat => {
     CATEGORY_MAP[cat.id] = cat;
   });
 
-  // Default sample transactions for initial experience
   const DEFAULT_SAMPLE_TRANSACTIONS = [
     {
       id: 'tx_demo_1',
@@ -118,9 +108,6 @@
     return d.toISOString().split('T')[0];
   }
 
-  // ==========================================================================
-  // 2. Application State & Storage
-  // ==========================================================================
   const STORAGE_KEY = 'finflow_transactions_v1';
   const CURRENCY_KEY = 'finflow_currency_v1';
   const THEME_KEY = 'finflow_theme_v1';
@@ -130,25 +117,21 @@
   let lastDeletedTx = null;
   let undoTimeout = null;
 
-  // Filter & Search State
   const filters = {
     search: '',
-    type: 'all', // 'all' | 'income' | 'expense'
+    type: 'all', 
     category: 'all',
-    sort: 'date-desc' // 'date-desc' | 'date-asc' | 'amount-desc' | 'amount-asc'
+    sort: 'date-desc' 
   };
 
-  // ==========================================================================
-  // 3. DOM Elements
-  // ==========================================================================
   const elements = {
-    // Theme & Currency
+
     currencySelect: document.getElementById('currencySelect'),
     themeToggleBtn: document.getElementById('themeToggleBtn'),
     resetDemoBtn: document.getElementById('resetDemoBtn'),
     amountCurrencyPrefix: document.getElementById('amountCurrencyPrefix'),
 
-    // Summary Cards
+  
     totalBalance: document.getElementById('totalBalance'),
     totalIncome: document.getElementById('totalIncome'),
     totalExpense: document.getElementById('totalExpense'),
@@ -160,7 +143,7 @@
     ratioProgressBar: document.getElementById('ratioProgressBar'),
     ratioStatusText: document.getElementById('ratioStatusText'),
 
-    // Form
+    
     transactionForm: document.getElementById('transactionForm'),
     typeExpense: document.getElementById('typeExpense'),
     typeIncome: document.getElementById('typeIncome'),
@@ -175,12 +158,12 @@
     dateError: document.getElementById('dateError'),
     categoryError: document.getElementById('categoryError'),
 
-    // Expense Breakdown
+    
     donutSvg: document.getElementById('donutSvg'),
     donutTopCategory: document.getElementById('donutTopCategory'),
     categoryBarsList: document.getElementById('categoryBarsList'),
 
-    // Transactions List & Toolbar
+    
     transactionsList: document.getElementById('transactionsList'),
     txCountBadge: document.getElementById('txCountBadge'),
     txSearchInput: document.getElementById('txSearchInput'),
@@ -195,16 +178,14 @@
     emptyStateDesc: document.getElementById('emptyStateDesc'),
     emptyStateActionBtn: document.getElementById('emptyStateActionBtn'),
 
-    // Toast & Modals
+    
     toastContainer: document.getElementById('toastContainer'),
     modalBackdrop: document.getElementById('confirmModalBackdrop'),
     modalConfirmBtn: document.getElementById('modalConfirmBtn'),
     modalCancelBtn: document.getElementById('modalCancelBtn')
   };
 
-  // ==========================================================================
-  // 4. Initialization
-  // ==========================================================================
+  
   function init() {
     initTheme();
     initCurrency();
@@ -221,9 +202,7 @@
     elements.txDate.value = today;
   }
 
-  // ==========================================================================
-  // 5. Theme & Currency Handling
-  // ==========================================================================
+ 
   function initTheme() {
     const savedTheme = localStorage.getItem(THEME_KEY);
     if (savedTheme) {
@@ -261,16 +240,14 @@
     renderAll();
   }
 
-  // ==========================================================================
-  // 6. Data Storage & Management
-  // ==========================================================================
+  
   function loadTransactions() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         transactions = JSON.parse(raw);
       } else {
-        // First visit: populate with realistic sample data
+        
         transactions = [...DEFAULT_SAMPLE_TRANSACTIONS];
         saveTransactions();
       }
@@ -291,7 +268,7 @@
 
   function resetDemoData() {
     transactions = JSON.parse(JSON.stringify(DEFAULT_SAMPLE_TRANSACTIONS));
-    // refresh dates to recent days
+    
     transactions.forEach((tx, idx) => {
       tx.date = getRelativeDate(idx + 1);
     });
@@ -308,9 +285,7 @@
     showToast('All transactions cleared.', 'info');
   }
 
-  // ==========================================================================
-  // 7. Form Handlers & Validation
-  // ==========================================================================
+ 
   function getCurrentFormType() {
     return elements.typeIncome.checked ? 'income' : 'expense';
   }
@@ -401,7 +376,7 @@
 
     if (hasError) return;
 
-    // Create new transaction
+   
     const newTx = {
       id: 'tx_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
       type,
@@ -416,7 +391,7 @@
     saveTransactions();
     renderAll();
 
-    // Reset fields except type & date
+   
     elements.txTitle.value = '';
     elements.txAmount.value = '';
     elements.txNote.value = '';
@@ -425,9 +400,7 @@
     showToast(`Added ${type === 'income' ? 'income' : 'expense'}: "${title}"`, 'success');
   }
 
-  // ==========================================================================
-  // 8. Calculations & Summary
-  // ==========================================================================
+  
   function calculateFinancials() {
     let incomeSum = 0;
     let expenseSum = 0;
@@ -476,7 +449,7 @@
   function renderSummary() {
     const stats = calculateFinancials();
 
-    // Total Balance
+    
     const signPrefix = stats.netBalance < 0 ? '-' : '';
     elements.totalBalance.textContent = `${signPrefix}${formatMoney(Math.abs(stats.netBalance))}`;
     
@@ -493,15 +466,15 @@
 
     elements.savingsRateText.textContent = `${stats.savingsRate.toFixed(1)}% saved`;
 
-    // Income Card
+   
     elements.totalIncome.textContent = `+${formatMoney(stats.incomeSum)}`;
     elements.incomeCount.textContent = `${stats.incomeCount} deposit${stats.incomeCount === 1 ? '' : 's'}`;
 
-    // Expense Card
+   
     elements.totalExpense.textContent = `-${formatMoney(stats.expenseSum)}`;
     elements.expenseCount.textContent = `${stats.expenseCount} payment${stats.expenseCount === 1 ? '' : 's'}`;
 
-    // Health & Ratio Card
+    
     elements.burnRate.textContent = `${Math.min(999, Math.round(stats.burnRatio))}%`;
     const progressWidth = Math.min(100, Math.max(0, stats.burnRatio));
     elements.ratioProgressBar.style.width = `${progressWidth}%`;
@@ -518,11 +491,9 @@
     }
   }
 
-  // ==========================================================================
-  // 9. Expense Breakdown & Pure SVG Donut Chart
-  // ==========================================================================
+  
   function renderExpenseBreakdown() {
-    // Tally expenses by category
+   
     const categoryTotals = {};
     let totalExpenseAmount = 0;
 
@@ -544,7 +515,7 @@
       };
     }).sort((a, b) => b.amount - a.amount);
 
-    // Update Top Category Badge
+    
     if (entries.length > 0) {
       elements.donutTopCategory.textContent = entries[0].name.split(' ')[0];
       elements.donutTopCategory.title = `${entries[0].name} (${formatMoney(entries[0].amount)})`;
@@ -552,10 +523,10 @@
       elements.donutTopCategory.textContent = 'None';
     }
 
-    // Render SVG Donut
+   
     renderSvgDonut(entries, totalExpenseAmount);
 
-    // Render Category Meter Bars
+    
     elements.categoryBarsList.innerHTML = '';
     if (entries.length === 0) {
       elements.categoryBarsList.innerHTML = `
@@ -596,7 +567,7 @@
     const center = 80;
     const circumference = 2 * Math.PI * radius;
 
-    // Background track ring
+    
     const bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     bgCircle.setAttribute('cx', center);
     bgCircle.setAttribute('cy', center);
@@ -619,7 +590,7 @@
       circle.setAttribute('r', radius);
       circle.setAttribute('stroke', item.color);
 
-      // Dash length represents category slice
+     
       const strokeDasharray = `${(item.percent / 100) * circumference} ${circumference}`;
       const strokeDashoffset = -((accumulatedPercent / 100) * circumference);
 
@@ -635,23 +606,21 @@
     });
   }
 
-  // ==========================================================================
-  // 10. Transactions List Rendering, Filtering & Sorting
-  // ==========================================================================
+  
   function getFilteredTransactions() {
     let result = [...transactions];
 
-    // Filter by Type
+   
     if (filters.type !== 'all') {
       result = result.filter(tx => tx.type === filters.type);
     }
 
-    // Filter by Category
+    
     if (filters.category !== 'all') {
       result = result.filter(tx => tx.category === filters.category);
     }
 
-    // Search query
+ 
     if (filters.search) {
       const q = filters.search.toLowerCase();
       result = result.filter(tx => {
@@ -662,7 +631,7 @@
       });
     }
 
-    // Sort
+
     result.sort((a, b) => {
       switch (filters.sort) {
         case 'date-asc':
@@ -786,9 +755,7 @@
       .replace(/'/g, '&#39;');
   }
 
-  // ==========================================================================
-  // 11. Transaction Deletion & Undo
-  // ==========================================================================
+ 
   function deleteTransaction(id) {
     const idx = transactions.findIndex(t => t.id === id);
     if (idx === -1) return;
@@ -812,9 +779,7 @@
     showToast(`Restored "${item.title}"`, 'success');
   }
 
-  // ==========================================================================
-  // 12. Export to CSV
-  // ==========================================================================
+  
   function exportToCsv() {
     if (transactions.length === 0) {
       showToast('No transactions to export.', 'info');
@@ -851,9 +816,7 @@
     showToast('Transactions exported to CSV!', 'success');
   }
 
-  // ==========================================================================
-  // 13. Toast Notifications & Modals
-  // ==========================================================================
+ 
   function showToast(message, type = 'info', hasUndo = false) {
     const toast = document.createElement('div');
     toast.className = 'toast';
@@ -899,16 +862,14 @@
     elements.modalBackdrop.style.display = 'none';
   }
 
-  // ==========================================================================
-  // 14. Event Listeners
-  // ==========================================================================
+  
   function attachEventListeners() {
-    // Theme & Currency
+    
     elements.themeToggleBtn.addEventListener('click', toggleTheme);
     elements.currencySelect.addEventListener('change', handleCurrencyChange);
     elements.resetDemoBtn.addEventListener('click', resetDemoData);
 
-    // Form Type Switch
+   
     elements.typeExpense.addEventListener('change', () => {
       populateFormCategories('expense');
     });
@@ -917,10 +878,10 @@
       populateFormCategories('income');
     });
 
-    // Form Submit
+   
     elements.transactionForm.addEventListener('submit', handleFormSubmit);
 
-    // Search Input
+    
     elements.txSearchInput.addEventListener('input', (e) => {
       filters.search = e.target.value.trim();
       elements.clearSearchBtn.style.display = filters.search ? 'block' : 'none';
@@ -934,7 +895,7 @@
       renderTransactionsList();
     });
 
-    // Type Filter Pills
+
     elements.pillButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         elements.pillButtons.forEach(b => {
@@ -948,19 +909,19 @@
       });
     });
 
-    // Category Filter Dropdown
+    
     elements.filterCategorySelect.addEventListener('change', (e) => {
       filters.category = e.target.value;
       renderTransactionsList();
     });
 
-    // Sort Dropdown
+    
     elements.sortTransactionsSelect.addEventListener('change', (e) => {
       filters.sort = e.target.value;
       renderTransactionsList();
     });
 
-    // Delegate Transaction Delete Click
+    
     elements.transactionsList.addEventListener('click', (e) => {
       const deleteBtn = e.target.closest('.tx-delete-btn');
       if (deleteBtn) {
@@ -971,10 +932,10 @@
       }
     });
 
-    // Export CSV
+    
     elements.exportCsvBtn.addEventListener('click', exportToCsv);
 
-    // Clear All Modal
+  
     elements.clearAllBtn.addEventListener('click', () => {
       if (transactions.length === 0) {
         showToast('No transactions to clear.', 'info');
@@ -992,12 +953,12 @@
       }
     });
 
-    // Empty state button action
+   
     elements.emptyStateActionBtn.addEventListener('click', () => {
       if (transactions.length === 0) {
         resetDemoData();
       } else {
-        // Reset filters
+        
         filters.search = '';
         filters.type = 'all';
         filters.category = 'all';
@@ -1012,16 +973,12 @@
     });
   }
 
-  // ==========================================================================
-  // 15. Master Render Function
-  // ==========================================================================
+  
   function renderAll() {
     renderSummary();
     renderExpenseBreakdown();
     renderTransactionsList();
   }
-
-  // Kickstart Application
   document.addEventListener('DOMContentLoaded', init);
 
 })();
