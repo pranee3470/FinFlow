@@ -1,10 +1,5 @@
-/* ==========================================================================
-   FinFlow — Personal Finance Dashboard Stylesheet
-   Modern, minimal, responsive & accessible design
-   ========================================================================== */
-
 :root {
-  /* Color Palette - Light Theme */
+  
   --bg-primary: #f8fafc;
   --bg-secondary: #f1f5f9;
   --surface: #ffffff;
@@ -40,26 +35,26 @@
   --info: #0ea5e9;
   --info-light: #f0f9ff;
 
-  /* Typography */
+ 
   --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 18px;
   --radius-full: 9999px;
 
-  /* Elevation Shadows */
+ 
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 16px rgba(0, 0, 0, 0.03);
 
-  /* Transitions */
+  
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 220ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-bounce: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Dark Theme Overrides */
+
 [data-theme="dark"] {
   --bg-primary: #0a0f1d;
   --bg-secondary: #0f172a;
@@ -96,7 +91,6 @@
   --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
-/* Base Reset */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -126,14 +120,14 @@ body {
   border: 0;
 }
 
-/* App Layout */
+
 .app-layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* Header */
+
 .app-header {
   background-color: var(--surface);
   border-bottom: 1px solid var(--border-subtle);
@@ -199,7 +193,7 @@ body {
   gap: 0.65rem;
 }
 
-/* Form Controls & Selects */
+
 .select-wrapper {
   position: relative;
   display: inline-block;
@@ -239,7 +233,7 @@ body {
   border-color: var(--primary);
 }
 
-/* Buttons */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -343,7 +337,6 @@ body {
   border-color: var(--border-hover);
 }
 
-/* Theme Toggle Icons */
 .sun-icon {
   display: block;
   width: 18px;
@@ -362,7 +355,7 @@ body {
   display: block;
 }
 
-/* Main Container */
+
 .main-container {
   max-width: 1240px;
   margin: 0 auto;
@@ -371,7 +364,7 @@ body {
   flex: 1;
 }
 
-/* Generic Card */
+
 .card {
   background-color: var(--surface);
   border: 1px solid var(--border-subtle);
@@ -398,9 +391,6 @@ body {
   margin-top: 0.15rem;
 }
 
-/* ==========================================================================
-   1. Summary Cards Section
-   ========================================================================== */
 .summary-section {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -570,9 +560,6 @@ body {
   color: var(--danger) !important;
 }
 
-/* ==========================================================================
-   2. Main Dashboard Layout (Grid)
-   ========================================================================== */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 380px 1fr;
@@ -590,9 +577,6 @@ body {
   min-width: 0; /* Prevents flex/grid overflow */
 }
 
-/* ==========================================================================
-   3. Transaction Input Form
-   ========================================================================== */
 .form-card form {
   padding: 1.25rem;
 }
@@ -629,7 +613,7 @@ body {
   font-size: 0.75rem;
 }
 
-/* Custom Type Toggle Button Group */
+
 .type-toggle-group {
   display: flex;
   background-color: var(--bg-secondary);
@@ -669,7 +653,7 @@ body {
   box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);
 }
 
-/* Inputs */
+
 .form-control {
   width: 100%;
   font-family: inherit;
@@ -719,9 +703,7 @@ body {
   min-height: 1rem;
 }
 
-/* ==========================================================================
-   4. Expense Breakdown Card & Donut Chart
-   ========================================================================== */
+
 .breakdown-body {
   padding: 1.25rem;
 }
@@ -834,9 +816,7 @@ body {
   transition: width 350ms ease;
 }
 
-/* ==========================================================================
-   5. Transactions Section
-   ========================================================================== */
+
 .transactions-header-block {
   padding: 1.25rem;
   border-bottom: 1px solid var(--border-subtle);
@@ -951,7 +931,7 @@ body {
   gap: 0.5rem;
 }
 
-/* Transactions List */
+
 .transactions-list-wrapper {
   padding: 0.5rem 0;
   min-height: 280px;
@@ -1077,7 +1057,7 @@ body {
   background-color: var(--danger-light);
 }
 
-/* Empty State */
+
 .empty-state {
   text-align: center;
   padding: 3.5rem 1.5rem;
@@ -1118,9 +1098,7 @@ body {
   margin-bottom: 1rem;
 }
 
-/* ==========================================================================
-   6. Toast Notifications
-   ========================================================================== */
+
 .toast-container {
   position: fixed;
   bottom: 1.5rem;
@@ -1184,9 +1162,7 @@ body {
   text-decoration: underline;
 }
 
-/* ==========================================================================
-   7. Confirmation Modal
-   ========================================================================== */
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -1238,9 +1214,7 @@ body {
   gap: 0.65rem;
 }
 
-/* ==========================================================================
-   8. Footer
-   ========================================================================== */
+
 .app-footer {
   border-top: 1px solid var(--border-subtle);
   padding: 1.25rem 1.5rem;
@@ -1250,9 +1224,7 @@ body {
   color: var(--text-muted);
 }
 
-/* ==========================================================================
-   9. Responsive Media Queries
-   ========================================================================== */
+
 @media (max-width: 1024px) {
   .summary-section {
     grid-template-columns: repeat(2, 1fr);
